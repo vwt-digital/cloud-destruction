@@ -3,7 +3,7 @@ timeout: 1800s
 substitutions:
   _PROJECTS_CATALOG_DIR: 'config/projects'
   _PROJECTS_DESTROY_LIST: 'config/destroy_projects.lst'
-  _ENV: 'config/env.sh'
+  _PARENT_ID: '<specify_parent_id_of_projects>'
 options:
   substitution_option: 'ALLOW_LOOSE'
 steps:
@@ -14,8 +14,7 @@ steps:
     args:
       - '-c'
       - |
-        source "${_ENV}" &&
-        gcloud projects list --filter="parent.id=$${_PARENT_ID}" --format="get(projectId)" |
+        gcloud projects list --filter="parent.id=${_PARENT_ID}" --format="get(projectId)" |
             sort > existing-projects.lst &&
         ls "${_PROJECTS_CATALOG_DIR}" > catalog-projects.lst &&
         sort -u catalog-projects.lst ${_PROJECTS_DESTROY_LIST} > catalog-and-destroy-projects.lst &&

@@ -20,8 +20,8 @@ done
 echo "Destroying Cloud Functions of ${DESTROY_PROJECT}..."
 for cloud_function in $(gcloud functions list --format="get(name)" --project="${DESTROY_PROJECT}")
 do
-    function_region=$(echo ${cloud_function} | cut -d"/" -f3)
-    function_name=$(echo ${cloud_function} | cut -d"/" -f6)
+    function_region=$(echo "${cloud_function}" | cut -d"/" -f4)
+    function_name=$(echo "${cloud_function}" | cut -d"/" -f6)
     gcloud --quiet functions delete "${function_name}" --region="${function_region}" --project="${DESTROY_PROJECT}"
 done
 
@@ -40,7 +40,7 @@ done
 echo "Deleting deployment of ${DESTROY_PROJECT}..."
 if gcloud --quiet deployment-manager deployments describe "${DESTROY_PROJECT}-project-deploy"
 then
-    gcloud deployment-manager deployments delete "${DESTROY_PROJECT}-project-deploy" --delete-policy=abandon
+    gcloud --quiet deployment-manager deployments delete "${DESTROY_PROJECT}-project-deploy" --delete-policy=abandon
 fi
 
 echo "Shutting down ${DESTROY_PROJECT}..."
