@@ -1,0 +1,56 @@
+---
+timeout: 1800s
+substitutions:
+  _PROJECTS_CATALOG_DIR: 'config/projects'
+  _PROJECTS_DESTROY_LIST: 'config/destroy_projects.lst'
+  _PARENT_ID: '<specify_parent_id_of_projects>'
+options:
+  substitution_option: 'ALLOW_LOOSE'
+steps:
+  # Check for projects not in projects catalog
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'check-catalog-consistency'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud projects list --filter="parent.id=${_PARENT_ID}" --format="get(projectId)" |
+            sort > existing-projects.lst &&
+        ls "${_PROJECTS_CATALOG_DIR}" > catalog-projects.lst &&
+        sort -u catalog-projects.lst ${_PROJECTS_DESTROY_LIST} > catalog-and-destroy-projects.lst &&
+        sort -u existing-projects.lst ${_PROJECTS_DESTROY_LIST} > existing-and-destroy-projects.lst &&
+        if ! diff existing-and-destroy-projects.lst catalog-and-destroy-projects.lst
+        then
+            echo "Inconsistency found between GCP project(s) and projects catalog!"
+            exit 1
+        fi
+
+  # Check if projects to destroy are not in projects catalog anymore
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'check-destroy-not-in-catalog'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if grep -f ${_PROJECTS_DESTROY_LIST} catalog-projects.lst
+        then
+            echo "Projects to destroy should not be in projects catalog anymore!"
+            exit 1
+        fi
+
+  # Check if projects to destroy are not in projects catalog anymore
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'destroy-projects'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        for _destroy_project in $(grep -f ${_PROJECTS_DESTROY_LIST} existing-projects.lst)
+        do
+            echo "Destroying $${_destroy_project}"
+            if ! scripts/destroy_project.sh "$${_destroy_project}"
+            then
+                echo "Error destroying $${_destroy_project}, aborting."
+                exit 1
+            fi
+        done
