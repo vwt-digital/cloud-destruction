@@ -48,7 +48,7 @@ steps:
         for _destroy_project in $(grep -f ${_PROJECTS_DESTROY_LIST} existing-projects.lst)
         do
             echo "Destroying $${_destroy_project}"
-            if ! scripts/destroy_project.sh "$${_destroy_project}"
+            if ! /workspace/cloud-destruction/scripts/destroy_project.sh "$${_destroy_project}"
             then
                 echo "Error destroying $${_destroy_project}, aborting."
                 exit 1
