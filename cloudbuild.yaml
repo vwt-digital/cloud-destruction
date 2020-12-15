@@ -38,7 +38,7 @@ steps:
             exit 1
         fi
 
-  # Check if projects to destroy are not in projects catalog anymore
+  # Shut down existing projects that are specified in _PROJECTS_DESTROY_LIST
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     id: 'destroy-projects'
     entrypoint: 'bash'
