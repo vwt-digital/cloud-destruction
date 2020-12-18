@@ -19,7 +19,7 @@ steps:
         ls "${_PROJECTS_CATALOG_DIR}" > catalog-projects.lst &&
         sort -u catalog-projects.lst ${_PROJECTS_DESTROY_LIST} > catalog-and-destroy-projects.lst &&
         sort -u existing-projects.lst ${_PROJECTS_DESTROY_LIST} > existing-and-destroy-projects.lst &&
-        if ! diff existing-and-destroy-projects.lst catalog-and-destroy-projects.lst
+        if diff existing-and-destroy-projects.lst catalog-and-destroy-projects.lst | grep "^<"
         then
             echo "Inconsistency found between GCP project(s) and projects catalog!"
             exit 1
