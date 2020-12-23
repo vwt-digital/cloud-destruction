@@ -1,0 +1,2 @@
+google-cloud-pubsub==2.2.0
+gobits==1.0.5

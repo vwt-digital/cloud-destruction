@@ -4,6 +4,8 @@ substitutions:
   _PROJECTS_CATALOG_DIR: 'config/projects'
   _PROJECTS_DESTROY_LIST: 'config/destroy_projects.lst'
   _PARENT_ID: '<specify_parent_id_of_projects>'
+  _PUBLISH_TOPIC_PROJECT: ''
+  _PUBLISH_TOPIC_NAME: ''
 options:
   substitution_option: 'ALLOW_LOOSE'
 steps:
@@ -54,3 +56,26 @@ steps:
                 exit 1
             fi
         done
+
+  # Shut down existing projects that are specified in _PROJECTS_DESTROY_LIST
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    id: 'publish-destroy-projects'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ -n "${_PUBLISH_TOPIC_NAME}" ]
+        then
+            if [ -z "$(which pip3)" ]
+            then
+                pip install virtualenv==16.7.9
+            else
+                pip3 install virtualenv
+            fi &&
+            virtualenv -p python3 venv &&
+            . venv/bin/activate &&
+            pip install -r /workspace/cloud-destruction/scripts/requirements.txt &&
+            python3 /workspace/cloud-destruction/scripts/publish_destroy_projects.py \
+                --projects-destroy-list ${_PROJECTS_DESTROY_LIST} \
+                --topic-project-id ${_PUBLISH_TOPIC_PROJECT} --topic-name ${_PUBLISH_TOPIC_NAME}
+        fi
