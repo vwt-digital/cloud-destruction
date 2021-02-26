@@ -11,7 +11,7 @@ The cloud-destruction Cloud Build is configured by passing it these substitution
 * ```_PROJECTS_DESTROY_LIST```: A text file listing all projects to shut down, each project on a seperate line.
 * ```_PARENT_ID```: The GCP ID of the organisation or folder containing all projects defined in the ```_PROJECTS_CATALOG_DIR```.
 
-Make sure that you submit the cloudbuild in the project managing GCP project. This can be done by either adding the (project tag)[https://cloud.google.com/sdk/gcloud/reference#--project] ```--project=``` or setting the project in the gcloud config with the (set project command)[https://cloud.google.com/sdk/gcloud/reference/config/set] ```gcloud config set project```.
+Make sure that you submit the cloudbuild in the project managing GCP project, not in the project to destroy. This can be done by either adding the [project tag](https://cloud.google.com/sdk/gcloud/reference#--project) ```--project=``` or setting the project in the gcloud config with the [set project command](https://cloud.google.com/sdk/gcloud/reference/config/set) ```gcloud config set project```.
 
 Running the cloud-destruction Cloud Build can be done by this command:
 ```
