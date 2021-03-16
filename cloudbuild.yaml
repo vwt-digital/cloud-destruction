@@ -4,8 +4,8 @@ substitutions:
   _PROJECTS_CATALOG_DIR: 'config/projects'
   _PROJECTS_DESTROY_LIST: 'config/destroy_projects.lst'
   _PARENT_ID: '<specify_parent_id_of_projects>'
-  _PUBLISH_TOPIC_PROJECT: ''
-  _PUBLISH_TOPIC_NAME: ''
+  _PUBLISH_TOPIC_NAME: '<specify_topic_to_publish_destroyed_projects_list_to>'
+  _PUBLISH_TOPIC_PROJECT: '<specify_project_where_topic_resides>'
 options:
   substitution_option: 'ALLOW_LOOSE'
 steps:
