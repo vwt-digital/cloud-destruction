@@ -50,7 +50,7 @@ steps:
         for _destroy_project in $(grep -f ${_PROJECTS_DESTROY_LIST} existing-projects.lst)
         do
             echo "Destroying $${_destroy_project}"
-            if ! /workspace/cloud-destruction/scripts/destroy_project.sh "$${_destroy_project}"
+            if ! ./scripts/destroy_project.sh "$${_destroy_project}"
             then
                 echo "Error destroying $${_destroy_project}, aborting."
                 exit 1
@@ -74,8 +74,8 @@ steps:
             fi &&
             virtualenv -p python3 venv &&
             . venv/bin/activate &&
-            pip install -r /workspace/cloud-destruction/scripts/requirements.txt &&
-            python3 /workspace/cloud-destruction/scripts/publish_destroy_projects.py \
+            pip install -r ./scripts/requirements.txt &&
+            python3 ./scripts/publish_destroy_projects.py \
                 --projects-destroy-list ${_PROJECTS_DESTROY_LIST} \
                 --topic-project-id ${_PUBLISH_TOPIC_PROJECT} --topic-name ${_PUBLISH_TOPIC_NAME}
         fi
