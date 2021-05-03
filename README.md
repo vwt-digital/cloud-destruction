@@ -20,7 +20,7 @@ Running the cloud-destruction Cloud Build can be done by this command:
 ```
 $ cd cloud-destruction
 $ gcloud builds submit . \
-  --substitutions="_PARENT_ID=nnn,_PROJECTS_DESTROY_LIST=destroy_projects.lst,_PROJECTS_CATALOG_DIR=config/projects,_PUBLISH_TOPIC_NAME=gcp_topic_name,_PUBLISH_TOPIC_PROJECT=gcp_project_name_of_topic"
+  --substitutions="_PARENT_ID=nnn,_PROJECTS_DESTROY_LIST=destroy_projects.lst,_PROJECTS_CATALOG_DIR=config/projects,_PUBLISH_TOPIC_NAME=gcp_topic_name,_PUBLISH_TOPIC_PROJECT=gcp_project_name_of_topic,_WORKING_DIRECTORY=."
 ```
 
 First, these checks will be done:
