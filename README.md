@@ -12,6 +12,7 @@ The cloud-destruction Cloud Build is configured by passing it these substitution
 * ```_PARENT_ID```: The GCP ID of the organisation or folder containing all projects defined in the ```_PROJECTS_CATALOG_DIR```.
 * ```_PUBLISH_TOPIC_NAME```: The GCP topic name that gets a list with destroyed projects
 * ```_PUBLISH_TOPIC_PROJECT```: The GCP project where the topic resides
+* ```_WORKING_DIRECTORY```: From where you want to deploy the cloudbuild
 
 Make sure that you submit the cloudbuild in the project managing GCP project, not in the project to destroy. This can be done by either adding the [project tag](https://cloud.google.com/sdk/gcloud/reference#--project) ```--project=``` or setting the project in the gcloud config with the [set project command](https://cloud.google.com/sdk/gcloud/reference/config/set) ```gcloud config set project```.
 
