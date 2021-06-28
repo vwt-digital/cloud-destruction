@@ -36,7 +36,7 @@ done
 echo "Destroying Cloud Endpoints of ${DESTROY_PROJECT}..."
 for endpoint_service in $(gcloud endpoints services list --format="get(serviceName)" --project="${DESTROY_PROJECT}")
 do
-    gcloud --quiet endpoint services delete "${endpoint_service}" --project="${DESTROY_PROJECT}"
+    gcloud endpoints services delete "${endpoint_service}" --project="${DESTROY_PROJECT}" --quiet
 done
 
 echo "Deleting deployment of ${DESTROY_PROJECT}..."
