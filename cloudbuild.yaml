@@ -6,6 +6,7 @@ substitutions:
   _PARENT_ID: '<specify_parent_id_of_projects>'
   _PUBLISH_TOPIC_NAME: '<specify_topic_to_publish_destroyed_projects_list_to>'
   _PUBLISH_TOPIC_PROJECT: '<specify_project_where_topic_resides>'
+  _WORKING_DIRECTORY: '/workspace/cloud-destruction'
 options:
   substitution_option: 'ALLOW_LOOSE'
 steps:
@@ -50,7 +51,7 @@ steps:
         for _destroy_project in $(grep -f ${_PROJECTS_DESTROY_LIST} existing-projects.lst)
         do
             echo "Destroying $${_destroy_project}"
-            if ! /workspace/cloud-destruction/scripts/destroy_project.sh "$${_destroy_project}"
+            if ! ${_WORKING_DIRECTORY}/scripts/destroy_project.sh "$${_destroy_project}"
             then
                 echo "Error destroying $${_destroy_project}, aborting."
                 exit 1
@@ -74,8 +75,8 @@ steps:
             fi &&
             virtualenv -p python3 venv &&
             . venv/bin/activate &&
-            pip install -r /workspace/cloud-destruction/scripts/requirements.txt &&
-            python3 /workspace/cloud-destruction/scripts/publish_destroy_projects.py \
+            pip install -r ${_WORKING_DIRECTORY}/scripts/requirements.txt &&
+            python3 ${_WORKING_DIRECTORY}/scripts/publish_destroy_projects.py \
                 --projects-destroy-list ${_PROJECTS_DESTROY_LIST} \
                 --topic-project-id ${_PUBLISH_TOPIC_PROJECT} --topic-name ${_PUBLISH_TOPIC_NAME}
         fi

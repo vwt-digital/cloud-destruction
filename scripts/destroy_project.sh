@@ -28,13 +28,15 @@ done
 echo "Destroying App Engine of ${DESTROY_PROJECT}..."
 for app_service in $(gcloud app services list --format="get(id)" --project="${DESTROY_PROJECT}")
 do
-    gcloud --quiet app services delete "${app_service}" --project="${DESTROY_PROJECT}"
+    gcloud --quiet app services delete "${app_service}" --project="${DESTROY_PROJECT}" ||
+    echo "INFO: Something is preventing the deletion of the app service, skipping this step."
+    echo "The app engine will be deleted when the project gets deleted."
 done
 
 echo "Destroying Cloud Endpoints of ${DESTROY_PROJECT}..."
 for endpoint_service in $(gcloud endpoints services list --format="get(serviceName)" --project="${DESTROY_PROJECT}")
 do
-    gcloud --quiet endpoint services delete "${endpoint_service}" --project="${DESTROY_PROJECT}"
+    gcloud endpoints services delete "${endpoint_service}" --project="${DESTROY_PROJECT}" --quiet
 done
 
 echo "Deleting deployment of ${DESTROY_PROJECT}..."
